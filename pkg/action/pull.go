@@ -84,6 +84,7 @@ func (p *Pull) Run(chartRef string) (string, error) {
 			getter.WithTLSClientConfig(p.CertFile, p.KeyFile, p.CaFile),
 			getter.WithInsecureSkipVerifyTLS(p.InsecureSkipTLSVerify),
 			getter.WithPlainHTTP(p.PlainHTTP),
+			getter.WithDebug(p.Settings.Debug),
 		},
 		RegistryClient:   p.cfg.RegistryClient,
 		RepositoryConfig: p.Settings.RepositoryConfig,

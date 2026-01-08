@@ -49,6 +49,7 @@ type getterOptions struct {
 	timeout               time.Duration
 	transport             *http.Transport
 	artifactType          string
+	debug                 bool
 }
 
 // Option allows specifying various settings configurable by the user for overriding the defaults
@@ -149,6 +150,13 @@ func WithTransport(transport *http.Transport) Option {
 func WithArtifactType(artifactType string) Option {
 	return func(opts *getterOptions) {
 		opts.artifactType = artifactType
+	}
+}
+
+// WithDebug enables debug logging for HTTP requests and responses
+func WithDebug(debug bool) Option {
+	return func(opts *getterOptions) {
+		opts.debug = debug
 	}
 }
 

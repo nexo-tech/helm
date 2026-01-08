@@ -26,6 +26,7 @@ import (
 
 	"helm.sh/helm/v4/internal/tlsutil"
 	"helm.sh/helm/v4/internal/version"
+	"helm.sh/helm/v4/pkg/registry"
 )
 
 // HTTPGetter is the default HTTP(/S) backend handler
@@ -151,8 +152,13 @@ func (g *HTTPGetter) httpClient() (*http.Client, error) {
 		}
 	}
 
+	var transport http.RoundTripper = g.transport
+	if g.opts.debug {
+		transport = &registry.LoggingTransport{RoundTripper: g.transport}
+	}
+
 	client := &http.Client{
-		Transport: g.transport,
+		Transport: transport,
 		Timeout:   g.opts.timeout,
 	}
 
