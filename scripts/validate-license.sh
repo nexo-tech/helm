@@ -28,7 +28,8 @@ find_files() {
 }
 
 # Use "|| :" to ignore the error code when grep returns empty
-failed_license_header=($(find_files | xargs grep -L 'Licensed under the Apache License, Version 2.0 (the "License")' || :))
+# Use mapfile (bash 4+) to safely populate array from command output
+mapfile -t failed_license_header < <(find_files | xargs grep -L 'Licensed under the Apache License, Version 2.0 (the "License")' || :)
 if (( ${#failed_license_header[@]} > 0 )); then
   echo "Some source files are missing license headers."
   printf '%s\n' "${failed_license_header[@]}"
@@ -36,7 +37,8 @@ if (( ${#failed_license_header[@]} > 0 )); then
 fi
 
 # Use "|| :" to ignore the error code when grep returns empty
-failed_copyright_header=($(find_files | xargs grep -L 'Copyright The Helm Authors.' || :))
+# Use mapfile (bash 4+) to safely populate array from command output
+mapfile -t failed_copyright_header < <(find_files | xargs grep -L 'Copyright The Helm Authors.' || :)
 if (( ${#failed_copyright_header[@]} > 0 )); then
   echo "Some source files are missing the copyright header."
   printf '%s\n' "${failed_copyright_header[@]}"
